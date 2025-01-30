@@ -47,7 +47,62 @@ class ModelTrainer:
                 "XGBClassifier":XGBClassifier()
             }
 
-            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models)
+            #Decision tree params
+            criterion = ['gini', 'entropy', 'log_loss']
+            max_depth = [3,5,9,15,20]
+            max_features = ['sqrt','log2']
+
+            #Random Forest params
+            n_estimators = [50,100,200]
+
+
+
+
+
+            penalty = ['l1', 'l2', 'elasticnet',None]
+            C = [0.01,0.1,1,0.0001,10]
+            class_weight = ['balanced',None]
+            solver = [ 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
+            kernel = ['linear', 'poly', 'rbf', 'sigmoid']
+            gamma = ['scale','auto']
+
+
+            #catboost_params
+            learning_rate = [0.001,0.01,0.1]
+
+            #xgb_params
+            sampling_method = ['uniform','gradient_based']
+            lma = [1,2,0.1,1.1]
+
+
+            #gbclassifier
+            loss = ['log_loss', 'exponential']
+
+
+            params_svc = dict(C=C, kernel=kernel, class_weight=class_weight, gamma=gamma)
+            params_lr = dict(penalty=penalty, C=C, class_weight=class_weight, solver=solver)
+            params_dt = dict(criterion=criterion, max_depth=max_depth, max_features=max_features)
+            params_rf = dict(criterion=criterion, max_depth=max_depth, max_features=max_features, n_estimators=n_estimators)
+            params_ctb = dict(max_depth=max_depth, n_estimators=n_estimators, learning_rate=learning_rate)
+            params_xgb = dict(max_depth=max_depth, reg_lambda=lma, sampling_method=sampling_method)
+            params_ada = dict(n_estimators=n_estimators, learning_rate=learning_rate)
+            params_gbst = dict(loss=loss, learning_rate=learning_rate, n_estimators=n_estimators, max_depth=max_depth)
+
+            params = {
+                    "SVC": params_svc,
+                    "LogisticRegression": params_lr,
+                    "DecisionTreeClassifier": params_dt,
+                    "RandomForestClassifier": params_rf,
+                    "CatBoostClassifier": params_ctb,
+                    "XGBClassifier": params_xgb,
+                    "AdaBoostClassifier": params_ada,
+                    "GradientBoostingClassifier": params_gbst
+                }
+
+
+
+
+            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models,params = params)
 
             best_model_score = max(sorted(model_report.values()))
 
