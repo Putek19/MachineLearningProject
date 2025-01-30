@@ -121,9 +121,8 @@ class DataTransformation:
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
 
             
-            df = pd.DataFrame(input_feature_train_arr)
-            print(df.isna().sum())
-            print(df.head(10))
+        
+            
             
 
             train_arr = np.c_[
